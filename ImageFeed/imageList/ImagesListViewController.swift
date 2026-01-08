@@ -15,6 +15,7 @@ class ImagesListViewController: UIViewController {
     }
 
     @IBOutlet private var tableView: UITableView!
+    func configCell(for cell: ImagesListCell) { }
     
 }
 
@@ -30,7 +31,14 @@ extension ImagesListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
+                
+                guard let imageListCell = cell as? ImagesListCell else {
+                    return UITableViewCell()
+                }
+                
+                configCell(for: imageListCell)
+                return imageListCell
     }
     
     

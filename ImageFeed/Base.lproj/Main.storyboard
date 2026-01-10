@@ -22,13 +22,51 @@
                                 <color key="backgroundColor" name="YP Background"/>
                                 <color key="sectionIndexBackgroundColor" name="YP Background"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" id="Vf8-BX-gO2" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="52"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImagesListCell" id="4b8-Hj-6mp" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="1067"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vf8-BX-gO2" id="aTP-a8-g5N" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="52"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4b8-Hj-6mp" id="zQo-XU-vtp">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="1067"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="jvK-v2-bLC">
+                                                    <rect key="frame" x="16" y="4" width="361" height="1059"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aw8-Ey-RFC">
+                                                    <rect key="frame" x="333" y="4" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="onh-k6-Rck"/>
+                                                        <constraint firstAttribute="width" constant="44" id="qzb-eI-T7f"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="No Active"/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="22 декабря 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y98-KF-g8i">
+                                                    <rect key="frame" x="67" y="-6" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" name="YP White"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Y98-KF-g8i" firstAttribute="bottom" secondItem="jvK-v2-bLC" secondAttribute="bottom" constant="-8" id="2IO-Vu-7wG"/>
+                                                <constraint firstAttribute="trailing" secondItem="jvK-v2-bLC" secondAttribute="trailing" constant="16" id="WrX-kA-hp2"/>
+                                                <constraint firstItem="Aw8-Ey-RFC" firstAttribute="top" secondItem="jvK-v2-bLC" secondAttribute="top" id="Wrt-H9-kFo"/>
+                                                <constraint firstAttribute="bottom" secondItem="jvK-v2-bLC" secondAttribute="bottom" constant="4" id="X7d-N9-qco"/>
+                                                <constraint firstItem="Aw8-Ey-RFC" firstAttribute="trailing" secondItem="jvK-v2-bLC" secondAttribute="trailing" id="i0G-d5-ZX7"/>
+                                                <constraint firstItem="jvK-v2-bLC" firstAttribute="top" secondItem="zQo-XU-vtp" secondAttribute="top" constant="4" id="jLB-IE-r1E"/>
+                                                <constraint firstItem="Y98-KF-g8i" firstAttribute="leading" secondItem="jvK-v2-bLC" secondAttribute="leading" constant="8" id="mAf-5f-UfX"/>
+                                                <constraint firstItem="jvK-v2-bLC" firstAttribute="leading" secondItem="zQo-XU-vtp" secondAttribute="leading" constant="16" id="woU-wi-59i"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="YP Black"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="ImagesListCell"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -40,10 +78,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="PWp-2P-wmN" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="STO-8B-sDG" userLabel="tableLeading"/>
-                            <constraint firstItem="PWp-2P-wmN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="cwi-bX-Ahf" userLabel="tableTop"/>
-                            <constraint firstAttribute="trailing" secondItem="PWp-2P-wmN" secondAttribute="trailing" id="nDh-PU-nTI" userLabel="tableTrailing"/>
-                            <constraint firstAttribute="bottom" secondItem="PWp-2P-wmN" secondAttribute="bottom" id="vRV-2B-K3a" userLabel="tableBottom"/>
+                            <constraint firstItem="PWp-2P-wmN" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="2D8-yp-ewl"/>
+                            <constraint firstItem="PWp-2P-wmN" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="II0-zr-nff"/>
+                            <constraint firstItem="PWp-2P-wmN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nad-D7-EgZ"/>
+                            <constraint firstAttribute="bottom" secondItem="PWp-2P-wmN" secondAttribute="bottom" id="zqY-Q5-MlZ"/>
                         </constraints>
                     </view>
                     <connections>
@@ -56,11 +94,16 @@
         </scene>
     </scenes>
     <resources>
+        <image name="0" width="1600" height="1059"/>
+        <image name="No Active" width="30" height="27"/>
         <namedColor name="YP Background">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP White">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

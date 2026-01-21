@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Qxt-15-zdG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lGd-og-sJg">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -124,6 +124,35 @@
             </objects>
             <point key="canvasLocation" x="872.51908396946567" y="130.98591549295776"/>
         </scene>
+        <!--Single Image View Controller-->
+        <scene sceneID="kOa-B2-CkM">
+            <objects>
+                <viewController id="lGd-og-sJg" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BMO-P1-G5l">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="3" translatesAutoresizingMaskIntoConstraints="NO" id="1Qp-Ms-DIF">
+                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6CJ-mH-uE5"/>
+                        <color key="backgroundColor" name="YP Black"/>
+                        <constraints>
+                            <constraint firstItem="1Qp-Ms-DIF" firstAttribute="leading" secondItem="6CJ-mH-uE5" secondAttribute="leading" id="7JT-Ih-dLH"/>
+                            <constraint firstItem="6CJ-mH-uE5" firstAttribute="bottom" secondItem="1Qp-Ms-DIF" secondAttribute="bottom" id="HoR-XQ-vrW"/>
+                            <constraint firstItem="1Qp-Ms-DIF" firstAttribute="top" secondItem="6CJ-mH-uE5" secondAttribute="top" id="OvL-5u-naD"/>
+                            <constraint firstItem="6CJ-mH-uE5" firstAttribute="trailing" secondItem="1Qp-Ms-DIF" secondAttribute="trailing" id="hSd-vj-wFv"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="1Qp-Ms-DIF" id="7vW-AV-W24"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cFl-7K-c6q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1659" y="131"/>
+        </scene>
         <!--Profile-->
         <scene sceneID="5Q5-ha-AQB">
             <objects>
@@ -236,6 +265,7 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
+        <image name="3" width="853" height="1280"/>
         <image name="No Active" width="30" height="27"/>
         <image name="exitButton" width="44" height="44"/>
         <image name="tab_editorial_active" width="30" height="30"/>

@@ -236,7 +236,7 @@
                                             <outlet property="cellButtonImage" destination="Aw8-Ey-RFC" id="F2B-bj-9wT"/>
                                             <outlet property="cellDataLabel" destination="Y98-KF-g8i" id="B1h-C2-2ix"/>
                                             <outlet property="cellImage" destination="jvK-v2-bLC" id="IrK-LG-aRi"/>
-                                            <segue destination="lGd-og-sJg" kind="show" id="yds-qn-fxt"/>
+                                            <segue destination="lGd-og-sJg" kind="show" id="4wh-8a-nar"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

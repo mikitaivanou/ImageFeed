@@ -11,13 +11,11 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var cellDataLabel: UILabel!
     
     @IBOutlet weak var cellImage: UIImageView!
-    
     @IBOutlet weak var cellButtonImage: UIButton!
     
     static let reuseIdentifier = "ImagesListCell"
     
     private let gradientLayer = CAGradientLayer()//gradient
-    
     private let gradientHeight: CGFloat = 30//gradient
     
     override func awakeFromNib() {//gradient

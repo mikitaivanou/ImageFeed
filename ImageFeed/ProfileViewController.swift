@@ -12,7 +12,6 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         let imageView = UIImageView(image: UIImage(named: "userPick"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)

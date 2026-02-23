@@ -7,14 +7,14 @@
 
 import UIKit
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func didAuthenticate(_ vc: AuthViewController)
+}
+
 class AuthViewController: UIViewController {
     
-    
- 
     let segueName = "ShowWebView"
-    
-    @IBAction func enterButton(_ sender: Any) {
-    }
+    weak var delegate: AuthViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +34,8 @@ class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
+    @IBAction func enterButton(_ sender: Any) {
+    }
     
     func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
@@ -49,14 +51,11 @@ extension AuthViewController: WebViewViewControllerDelegate {
         _ vc: WebViewViewController,
         didAuthenticateWithCode code: String
     ) {
-        
         OAuth2Service.shared.fetchOAuthToken(code: code) { [weak self] result in
             switch result {
-                
             case .success(let token):
                 print("Token received:", token)
                 vc.dismiss(animated: true)
-                
             case .failure(let error):
                 print("Authorization error:", error)
             }

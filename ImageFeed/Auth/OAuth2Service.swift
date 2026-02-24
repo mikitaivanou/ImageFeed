@@ -17,7 +17,10 @@ final class OAuth2Service {
         completion: @escaping (Result<String, Error>) -> Void
     ) {
         guard let request = makeOAuthTokenRequest(code: code) else {
-            completion(.failure(NetworkError.invalidRequest))
+            
+            DispatchQueue.main.async{
+                completion(.failure(NetworkError.invalidRequest))
+            }
             return
         }
         let task = urlSession.data(for: request) { result in
@@ -28,14 +31,20 @@ final class OAuth2Service {
                     let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
                     let token = response.accessToken
                     OAuth2TokenStorage.shared.token = token
-                    completion(.success(token))
+                    DispatchQueue.main.async{
+                        completion(.success(token))
+                    }
                 } catch {
                     print("Decoding error:", error)
-                    completion(.failure(NetworkError.decodingError(error)))
+                    DispatchQueue.main.async{
+                        completion(.failure(NetworkError.decodingError(error)))
+                    }
                 }
             case .failure(let error):
                 print("Network error:", error)
-                completion(.failure(error))
+                DispatchQueue.main.async{
+                    completion(.failure(error))
+                }
             }
         }
         task.resume()

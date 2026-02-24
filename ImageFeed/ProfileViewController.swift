@@ -47,9 +47,17 @@ final class ProfileViewController: UIViewController {
         labelGreeting.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         labelGreeting.topAnchor.constraint(equalTo: labelPersonTag.bottomAnchor, constant: 8).isActive = true
         
-        
+        var exitImage: UIImage {
+            if let systemImage = UIImage(systemName: "ipad.and.arrow.forward") {
+                return systemImage
+            }
+            guard let assetImage = UIImage(named: "exitButton") else {
+                fatalError("Missing exitButton image")
+            }
+            return assetImage
+        }
         let button = UIButton.systemButton(
-            with: UIImage(systemName: "ipad.and.arrow.forward")!,
+            with: exitImage,
             target: self,
             action: #selector(Self.didTapButton)
         )

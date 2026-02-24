@@ -13,5 +13,10 @@ import Foundation
         static let secretKey = "CjTkPX8OfUl_WAz4IWU6aymfAXa1jz4HKLgAP9YYr3o"
         static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
         static let accessScope = "public+read_user+write_likes"
-        static let defaultBaseURLString = URL(string: "https://api.unsplash.com")!
+        static var defaultBaseURLString: URL {
+            guard let url = URL(string: "https://api.unsplash.com") else {
+                fatalError("Invalid base URL")
+            }
+            return url
+        }
     }

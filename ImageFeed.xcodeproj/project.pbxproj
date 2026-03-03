@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		292E90BA2F571B7600B27446 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 292E90B92F571B7600B27446 /* ProgressHUD */; };
 		295BE8042F4242FF008E425D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 295BE8032F4242FF008E425D /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				295BE8042F4242FF008E425D /* WebKit.framework in Frameworks */,
+				292E90BA2F571B7600B27446 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +95,7 @@
 			);
 			name = ImageFeed;
 			packageProductDependencies = (
+				292E90B92F571B7600B27446 /* ProgressHUD */,
 			);
 			productName = ImageFeed;
 			productReference = 29A1AAA62F0832F900557723 /* ImageFeed.app */;
@@ -122,6 +125,9 @@
 			);
 			mainGroup = 29A1AA9D2F0832F900557723;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				292E90B82F571B7600B27446 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 29A1AAA72F0832F900557723 /* Products */;
 			projectDirPath = "";
@@ -282,7 +288,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -340,7 +346,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -372,6 +378,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		292E90B82F571B7600B27446 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
+			requirement = {
+				kind = exactVersion;
+				version = 14.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		292E90B92F571B7600B27446 /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 292E90B82F571B7600B27446 /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 29A1AA9E2F0832F900557723 /* Project object */;
 }

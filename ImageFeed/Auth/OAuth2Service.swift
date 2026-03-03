@@ -10,12 +10,31 @@ final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
     
+    //        устранение гонки 0.0
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    //        устранение гонки 0.1
+    
+    
     private init() {}
     
     func fetchOAuthToken(
         code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
+        
+//        устранение гонки 1.0
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            completion(.failure(NetworkError.invalidRequest))
+            return
+        }
+
+        task?.cancel()
+        lastCode = code
+        
+//        устранение гонки 1.1
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
             
             DispatchQueue.main.async{
@@ -23,31 +42,35 @@ final class OAuth2Service {
             }
             return
         }
-        let task = urlSession.data(for: request) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let token = response.accessToken
-                    OAuth2TokenStorage.shared.token = token
-                    DispatchQueue.main.async{
-                        completion(.success(token))
-                    }
-                } catch {
-                    print("Decoding error:", error)
-                    DispatchQueue.main.async{
-                        completion(.failure(NetworkError.decodingError(error)))
-                    }
-                }
-            case .failure(let error):
-                print("Network error:", error)
-                DispatchQueue.main.async{
-                    completion(.failure(error))
-                }
-            }
-        }
-        task.resume()
+        let task = urlSession.data(for: request) { [weak self] result in
+
+               DispatchQueue.main.async {
+                   defer {
+                       // всегда очищаем состояние
+                       self?.task = nil
+                       self?.lastCode = nil
+                   }
+
+                   switch result {
+                   case .success(let data):
+                       do {
+                           let decoder = JSONDecoder()
+                           let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                           let token = response.accessToken
+                           OAuth2TokenStorage.shared.token = token
+                           completion(.success(token))
+                       } catch {
+                           completion(.failure(NetworkError.decodingError(error)))
+                       }
+
+                   case .failure(let error):
+                       completion(.failure(error))
+                   }
+               }
+           }
+
+           self.task = task
+           task.resume()
     }
     
     private func makeOAuthTokenRequest(code: String?) -> URLRequest? {

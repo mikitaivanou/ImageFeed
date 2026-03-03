@@ -8,6 +8,9 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
+    private let profileService = ProfileService.shared
+  
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -18,8 +21,9 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if storage.token != nil {
-            switchToTabBarController()
+        if storage.token != nil, let token = storage.token {
+//            switchToTabBarController()
+            fetchProfile(token: token)
         } else {
             // Show Auth Screen
             performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
@@ -42,6 +46,26 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
         
     }
+    
+    private func fetchProfile(token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+
+            guard let self = self else { return }
+
+            switch result {
+            case let .success(profile):
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
+                self.switchToTabBarController()
+
+            case let .failure(error):
+                print(error)
+                break
+            }
+        }
+    }
+    
 }
 
 extension SplashViewController {
@@ -64,6 +88,12 @@ extension SplashViewController {
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
-        switchToTabBarController()
+        guard let token = storage.token else {
+                    return
+                }
+                
+                fetchProfile(token: token)
+            
+//        switchToTabBarController()
     }
 }

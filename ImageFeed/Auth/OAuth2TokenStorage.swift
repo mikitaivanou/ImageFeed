@@ -6,24 +6,29 @@
 //
 
 import Foundation
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
-    
+    private init() {}
     static let shared = OAuth2TokenStorage()
+    private let tokenKey = "token"
     var token: String? {
         get {
-            UserDefaults.standard.string(forKey: tokenKey)
+            // Получаем токен из Keychain
+            return KeychainWrapper.standard.string(forKey: tokenKey)
         }
         set {
-            if let newValue = newValue {
-                UserDefaults.standard.set(newValue, forKey: tokenKey)
+            if let token = newValue {
+                // Сохраняем токен в Keychain
+                KeychainWrapper.standard.set(token, forKey: tokenKey)
             } else {
-                UserDefaults.standard.removeObject(forKey: tokenKey)
+                // Удаляем токен из Keychain
+                KeychainWrapper.standard.removeObject(forKey: tokenKey)
             }
         }
     }
-    private let tokenKey = "BearerToken"
+
     
-    private init() {}
+    
     
 }

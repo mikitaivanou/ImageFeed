@@ -5,6 +5,7 @@
 //  Created by Mikita Ivanou on 14.01.26.
 //
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -113,9 +114,47 @@ final class ProfileViewController: UIViewController {
     private func updateAvatar() {
             guard
                 let profileImageURL = ProfileImageService.shared.avatarURL,
-                let url = URL(string: profileImageURL)
+                let imageUrl = URL(string: profileImageURL)
             else { return }
-            // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+        print("imageUrl: \(imageUrl)")
+
+                let placeholderImage = UIImage(systemName: "person.circle.fill")?
+                    .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+                    .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+
+                let processor = RoundCornerImageProcessor(cornerRadius: 35) // Радиус для круга
+                imageView.kf.indicatorType = .activity
+                imageView.kf.setImage(
+                    with: imageUrl,
+                    placeholder: placeholderImage,
+                    options: [
+                        .processor(processor),
+                        .scaleFactor(UIScreen.main.scale), // Учитываем масштаб экрана
+                        .cacheOriginalImage, // Кэшируем оригинал
+                        .forceRefresh // Игнорируем кэш, чтобы обновить
+                    ]) { result in
+
+                        switch result {
+                            // Успешная загрузка
+                        case .success(let value):
+                            // Картинка
+                            print(value.image)
+
+                            // Откуда картинка загружена:
+                            // - .none — из сети.
+                            // - .memory — из кэша оперативной памяти.
+                            // - .disk — из дискового кэша.
+                            print(value.cacheType)
+
+                            // Информация об источнике.
+                            print(value.source)
+
+                            // В случае ошибки
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+
         }
     
     @objc

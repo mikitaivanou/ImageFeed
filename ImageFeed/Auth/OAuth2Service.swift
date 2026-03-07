@@ -9,6 +9,7 @@ import Foundation
 final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
+//    var authToken = OAuth2TokenStorage.shared.token
     
     //        устранение гонки 0.0
     private var task: URLSessionTask?
@@ -42,29 +43,26 @@ final class OAuth2Service {
             }
             return
         }
-        let task = urlSession.data(for: request) { [weak self] result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.dismiss()
+                guard let self = self else { return }
 
-               DispatchQueue.main.async {
-                   defer {
-                       // всегда очищаем состояние
-                       self?.task = nil
-                       self?.lastCode = nil
-                   }
+                switch result {
+                case .success(let body):
+                    let authToken = body.accessToken
+                    OAuth2TokenStorage.shared.token = authToken // сохраняем в свойство
+                    completion(.success(authToken)) // возвращаем наружу
 
-                   switch result {
-                   case .success(let data):
-                       do {
-                           let decoder = JSONDecoder()
-                           let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                           let token = response.accessToken
-                           OAuth2TokenStorage.shared.token = token
-                           completion(.success(token))
-                       } catch {
-                           completion(.failure(NetworkError.decodingError(error)))
-                       }
+                    self.task = nil
+                    self.lastCode = nil
 
-                   case .failure(let error):
-                       completion(.failure(error))
+                case .failure(let error):
+                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
+                    completion(.failure(error)) // ошибка
+
+                    self.task = nil
+                    self.lastCode = nil
                    }
                }
            }

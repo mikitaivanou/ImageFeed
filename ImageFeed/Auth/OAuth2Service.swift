@@ -9,35 +9,23 @@ import Foundation
 final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
-//    var authToken = OAuth2TokenStorage.shared.token
-    
-    //        устранение гонки 0.0
     private var task: URLSessionTask?
     private var lastCode: String?
-    //        устранение гонки 0.1
-    
-    
     private init() {}
     
     func fetchOAuthToken(
         code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
-        
-//        устранение гонки 1.0
         assert(Thread.isMainThread)
         guard lastCode != code else {
             completion(.failure(NetworkError.invalidRequest))
             return
         }
-
         task?.cancel()
         lastCode = code
         
-//        устранение гонки 1.1
-        
         guard let request = makeOAuthTokenRequest(code: code) else {
-            
             DispatchQueue.main.async{
                 completion(.failure(NetworkError.invalidRequest))
             }
@@ -47,28 +35,25 @@ final class OAuth2Service {
             DispatchQueue.main.async {
                 UIBlockingProgressHUD.dismiss()
                 guard let self = self else { return }
-
+                
                 switch result {
                 case .success(let body):
                     let authToken = body.accessToken
-                    OAuth2TokenStorage.shared.token = authToken // сохраняем в свойство
-                    completion(.success(authToken)) // возвращаем наружу
-
+                    OAuth2TokenStorage.shared.token = authToken
+                    completion(.success(authToken))
                     self.task = nil
                     self.lastCode = nil
-
                 case .failure(let error):
                     print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                     completion(.failure(error)) // ошибка
-
+                    
                     self.task = nil
                     self.lastCode = nil
-                   }
-               }
-           }
-
-           self.task = task
-           task.resume()
+                }
+            }
+        }
+        self.task = task
+        task.resume()
     }
     
     private func makeOAuthTokenRequest(code: String?) -> URLRequest? {
@@ -85,10 +70,8 @@ final class OAuth2Service {
         ]
         
         guard let url = components.url else {return nil}
-        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        
         return request
     }
 }

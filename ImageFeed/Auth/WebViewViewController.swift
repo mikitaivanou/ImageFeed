@@ -23,22 +23,20 @@ class WebViewViewController: UIViewController {
         super.viewDidLoad()
         loadAuthView()
         webView.navigationDelegate = self
-      
     }
     
-
     override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            estimatedProgressObservation = webView.observe(
-                \.estimatedProgress,
-                 options: [],
-                 changeHandler: { [weak self] _, _ in
-                     guard let self = self else { return }
-                     self.updateProgress()
-                 })
-            updateProgress()
-        }
-   
+        super.viewDidAppear(animated)
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
+        updateProgress()
+    }
+    
     
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
@@ -51,7 +49,7 @@ class WebViewViewController: UIViewController {
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),                   //4
+            URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: Constants.accessScope)
         ]
         guard let url = urlComponents.url

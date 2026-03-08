@@ -25,7 +25,6 @@ extension URLSession {
                 completion(result)
             }
         }
-        
         let task = dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
                 if 200 ..< 300 ~= statusCode {
@@ -39,7 +38,6 @@ extension URLSession {
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
             }
         })
-        
         return task
     }
 }
@@ -50,8 +48,6 @@ extension URLSession {
         completion: @escaping (Result<T, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
-//        decoder.keyDecodingStrategy = .convertFromSnakeCase // Явно устанавливаем стратегию - сразу убираем или комментим!!!!
-
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
@@ -69,13 +65,11 @@ extension URLSession {
                     }
                     completion(.failure(error))
                 }
-
             case .failure(let error):
                 print("Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
-
         return task
     }
 }

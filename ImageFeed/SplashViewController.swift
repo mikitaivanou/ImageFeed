@@ -33,7 +33,7 @@ final class SplashViewController: UIViewController {
     }
     
     private func setupImageView() {
-        let imageSplashScreenLogo = UIImage(named: "splashScreenLogo")
+        let imageSplashScreenLogo = UIImage(named: "launchSign")
         imageView = UIImageView(image: imageSplashScreenLogo)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
@@ -78,7 +78,7 @@ final class SplashViewController: UIViewController {
                 self.switchToTabBarController()
                 
             case let .failure(error):
-                print(error)
+                print("[SpalshViewController.fetchProfile] Ошибка: \(error.localizedDescription)")
                 break
             }
         }

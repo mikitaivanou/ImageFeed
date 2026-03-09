@@ -13,8 +13,8 @@ class WebViewViewController: UIViewController {
         static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     }
     
-    @IBOutlet private var webView: WKWebView!
-    @IBOutlet private var progressView: UIProgressView!
+    @IBOutlet private weak var webView: WKWebView!
+    @IBOutlet private weak var progressView: UIProgressView!
     
     weak var delegate: WebViewViewControllerDelegate?
     private var estimatedProgressObservation: NSKeyValueObservation?

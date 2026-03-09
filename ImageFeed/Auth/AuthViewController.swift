@@ -12,9 +12,9 @@ protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
 }
 
-class AuthViewController: UIViewController {
+final class AuthViewController: UIViewController {
     
-    let segueName = "ShowWebView"
+    private let segueName = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -35,10 +35,8 @@ class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    @IBAction func enterButton(_ sender: Any) {
-    }
     
-    func configureBackButton() {
+    private func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -62,7 +60,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 print("Token received:", token)
                 vc.dismiss(animated: true)
             case .failure(let error):
-                print("Authorization error:", error)
+                print("[AuthViewController.webViewViewController] Ошибка: \(error.localizedDescription)")
                 self.showAuthErrorAlert()
             }
         }
@@ -78,7 +76,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
 extension AuthViewController {
     func showAuthErrorAlert() {
         let alertController = UIAlertController(
-            title: "Что-то пошло не так",
+            title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
             preferredStyle: .alert
         )

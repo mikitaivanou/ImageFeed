@@ -127,7 +127,7 @@ final class ProfileViewController: UIViewController {
                     print(value.cacheType)
                     print(value.source)
                 case .failure(let error):
-                    print(error)
+                    print("[ProfileViewController.updateAvatar] Ошибка: \(error.localizedDescription)")
                 }
             }
     }

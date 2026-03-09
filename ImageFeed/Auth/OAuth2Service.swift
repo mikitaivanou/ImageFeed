@@ -19,7 +19,9 @@ final class OAuth2Service {
     ) {
         assert(Thread.isMainThread)
         guard lastCode != code else {
-            completion(.failure(NetworkError.invalidRequest))
+            let error = NetworkError.invalidRequest
+            print("[OAuth2Service.fetchOAuthToken] Ошибка: \(error.localizedDescription)")
+            completion(.failure(error))
             return
         }
         task?.cancel()
@@ -27,7 +29,9 @@ final class OAuth2Service {
         
         guard let request = makeOAuthTokenRequest(code: code) else {
             DispatchQueue.main.async{
-                completion(.failure(NetworkError.invalidRequest))
+                let error = NetworkError.invalidRequest
+                print("[OAuth2Service.fetchOAuthToken] Ошибка: \(error.localizedDescription)")
+                completion(.failure(error))
             }
             return
         }
@@ -44,8 +48,8 @@ final class OAuth2Service {
                     self.task = nil
                     self.lastCode = nil
                 case .failure(let error):
-                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
-                    completion(.failure(error)) // ошибка
+                    print("[OAuth2Service.fetchOAuthToken] Ошибка: \(error.localizedDescription)")
+                    completion(.failure(error))
                     
                     self.task = nil
                     self.lastCode = nil

@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
 }
 
-class AuthViewController: UIViewController {
+final class AuthViewController: UIViewController {
     
-    let segueName = "ShowWebView"
+    private let segueName = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -34,10 +35,8 @@ class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    @IBAction func enterButton(_ sender: Any) {
-    }
     
-    func configureBackButton() {
+    private func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -51,7 +50,9 @@ extension AuthViewController: WebViewViewControllerDelegate {
         _ vc: WebViewViewController,
         didAuthenticateWithCode code: String
     ) {
+        UIBlockingProgressHUD.show()
         OAuth2Service.shared.fetchOAuthToken(code: code) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
             case .success(let token):
@@ -59,7 +60,8 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 print("Token received:", token)
                 vc.dismiss(animated: true)
             case .failure(let error):
-                print("Authorization error:", error)
+                print("[AuthViewController.webViewViewController] Ошибка: \(error.localizedDescription)")
+                self.showAuthErrorAlert()
             }
         }
     }
@@ -71,3 +73,15 @@ extension AuthViewController: WebViewViewControllerDelegate {
 
 
 
+extension AuthViewController {
+    func showAuthErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+}

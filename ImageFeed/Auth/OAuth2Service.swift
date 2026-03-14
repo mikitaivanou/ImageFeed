@@ -9,44 +9,54 @@ import Foundation
 final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
-    
+    private var task: URLSessionTask?
+    private var lastCode: String?
     private init() {}
     
     func fetchOAuthToken(
         code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            let error = NetworkError.invalidRequest
+            print("[OAuth2Service.fetchOAuthToken] Ошибка: \(error.localizedDescription)")
+            completion(.failure(error))
+            return
+        }
+        task?.cancel()
+        lastCode = code
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
-            
             DispatchQueue.main.async{
-                completion(.failure(NetworkError.invalidRequest))
+                let error = NetworkError.invalidRequest
+                print("[OAuth2Service.fetchOAuthToken] Ошибка: \(error.localizedDescription)")
+                completion(.failure(error))
             }
             return
         }
-        let task = urlSession.data(for: request) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let token = response.accessToken
-                    OAuth2TokenStorage.shared.token = token
-                    DispatchQueue.main.async{
-                        completion(.success(token))
-                    }
-                } catch {
-                    print("Decoding error:", error)
-                    DispatchQueue.main.async{
-                        completion(.failure(NetworkError.decodingError(error)))
-                    }
-                }
-            case .failure(let error):
-                print("Network error:", error)
-                DispatchQueue.main.async{
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.dismiss()
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let body):
+                    let authToken = body.accessToken
+                    OAuth2TokenStorage.shared.token = authToken
+                    completion(.success(authToken))
+                    self.task = nil
+                    self.lastCode = nil
+                case .failure(let error):
+                    print("[OAuth2Service.fetchOAuthToken] Ошибка: \(error.localizedDescription)")
                     completion(.failure(error))
+                    
+                    self.task = nil
+                    self.lastCode = nil
                 }
             }
         }
+        self.task = task
         task.resume()
     }
     
@@ -64,10 +74,8 @@ final class OAuth2Service {
         ]
         
         guard let url = components.url else {return nil}
-        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        
         return request
     }
 }

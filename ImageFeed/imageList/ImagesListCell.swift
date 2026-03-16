@@ -6,25 +6,21 @@
 //
 
 import UIKit
-import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var cellDataLabel: UILabel!
+    
     @IBOutlet weak var cellImage: UIImageView!
     @IBOutlet weak var cellButtonImage: UIButton!
     
     static let reuseIdentifier = "ImagesListCell"
-    weak var delegate: ImagesListCellDelegate?
+    
     private let gradientLayer = CAGradientLayer()//gradient
     private let gradientHeight: CGFloat = 30//gradient
     
     override func awakeFromNib() {//gradient
         super.awakeFromNib()
         setupGradient()
-    }
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        cellImage.kf.cancelDownloadTask()
     }
     
     override func layoutSubviews() {//gradient
@@ -37,9 +33,7 @@ final class ImagesListCell: UITableViewCell {
         )
     }
     
-    
     @IBAction func cellButton(_ sender: Any) {
-        delegate?.imageListCellDidTapLike(self)
     }
     
     private func setupGradient() {//gradient
@@ -54,14 +48,6 @@ final class ImagesListCell: UITableViewCell {
         
         // contentView.layer.addSublayer(gradientLayer)
         contentView.layer.insertSublayer(gradientLayer, at: 1)
-    }
-    
-    func setIsLiked(_ isLiked: Bool) {
-        let image = isLiked
-            ? UIImage(named: "like_button_on")
-            : UIImage(named: "like_button_off")
-
-        cellButtonImage.setImage(image, for: .normal)
     }
 }
 
@@ -78,8 +64,4 @@ extension UIColor {//gradient
         
         self.init(red: r, green: g, blue: b, alpha: alpha)
     }
-}
-
-protocol ImagesListCellDelegate: AnyObject {
-    func imageListCellDidTapLike(_ cell: ImagesListCell)
 }

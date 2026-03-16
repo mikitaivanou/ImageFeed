@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     
@@ -14,7 +13,6 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var scrollView: UIScrollView!
     
-    var imageURL: URL?
     var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else {return}
@@ -25,7 +23,6 @@ final class SingleImageViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadImage()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         
@@ -60,25 +57,6 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
-    }
-    private func loadImage() {
-        guard let url = imageURL else { return }
-        
-        UIBlockingProgressHUD.show()
-        
-        imageView.kf.setImage(with: url) { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
-            
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let value):
-                self.image = value.image
-                
-            case .failure(let error):
-                print("[SingleImageViewController.loadImage]: image loading error \(error)")
-            }
-        }
     }
 }
 

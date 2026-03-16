@@ -80,9 +80,5 @@ final class ProfileService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
-    
-    func logoutProfile() {
-        self.profile = nil
-    }
 }
 

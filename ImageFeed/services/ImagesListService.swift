@@ -59,8 +59,6 @@ final class ImagesListService {
         
     }
     
-    
-    
     private func makePhotoListRequest(nextPage: Int, token: String) -> URLRequest? {
         guard var components = URLComponents(string: "https://api.unsplash.com/photos")
         else {
@@ -101,8 +99,7 @@ final class ImagesListService {
         
         let task = urlSession.dataTask(with: request) { [weak self] _, _, error in
             
-            guard let self = self else { return }
-            
+            guard let self  else { return }
             if let error = error {
                 DispatchQueue.main.async {
                     print("[ImagesListService.changeLike] Ошибка: \(error.localizedDescription)")

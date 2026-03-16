@@ -138,23 +138,6 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-//        let photo = photos[indexPath.row]
-//        
-//        if let url = URL(string: photo.thumbImageURL) {
-//            imageListCell.cellImage.kf.indicatorType = .activity
-//            imageListCell.cellImage.kf.setImage(with: url) { [weak self] _ in
-//                guard let self = self else { return }
-//                tableView.reloadRows(at: [indexPath], with: .automatic)
-//            }
-//        }
-//        
-//        if let date = photo.createdAt {
-//            imageListCell.cellDataLabel.text = dateFormatter.string(from: date)
-//        } else {
-//            imageListCell.cellDataLabel.text = ""
-//        }
-        
-        
         configCell(for: imageListCell, with: indexPath)
         imageListCell.delegate = self
         

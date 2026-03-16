@@ -11,9 +11,12 @@ import WebKit
 
 final class ProfileLogoutService {
     static let shared = ProfileLogoutService()
+    
     let profileService = ProfileService.shared
-    private let imagesListService = ImagesListService.shared
     let userAvatar = ProfileImageService.shared
+    
+    private let imagesListService = ImagesListService.shared
+    
     
     private init() { }
     

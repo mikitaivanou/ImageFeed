@@ -1,10 +1,3 @@
-//
-//  ProfileImageService.swift
-//  ImageFeed
-//
-//  Created by Mikita Ivanou on 03/03/2026.
-//
-
 import UIKit
 
 
@@ -70,7 +63,7 @@ final class ProfileImageService {
                     )
                 
             case .failure(let error):
-                print("[ProfileService.fetchProfile] Ошибка: \(error.localizedDescription)")
+                print("[ProfileImageService.fetchProfileImageURL] Ошибка: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -89,4 +82,8 @@ final class ProfileImageService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    func logout() {
+        self.avatarURL = nil
+    }
 }
+

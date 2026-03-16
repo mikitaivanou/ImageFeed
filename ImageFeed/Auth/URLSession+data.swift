@@ -31,7 +31,7 @@ extension URLSession {
                     fulfillCompletionOnTheMainThread(.success(data)) 
                 } else {
                     let error = NetworkError.httpStatusCode(statusCode)
-                    print("[URLSession extension.data] Ошибка: \(error.localizedDescription)")
+                    print("[URLSession extension.data] Ошибка: \(error)")
                     fulfillCompletionOnTheMainThread(.failure(error))
                 }
             } else if let error = error {
@@ -54,7 +54,6 @@ extension URLSession {
         completion: @escaping (Result<T, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):

@@ -9,7 +9,7 @@ import Foundation
 
 protocol ProfilePresenterProtocol: AnyObject {
     var view: ProfileViewProtocol? { get set }
-
+    
     func viewDidLoad()
     func didTapLogoutButton()
     func didConfirmLogout()

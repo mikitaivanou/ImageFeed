@@ -42,7 +42,7 @@ final class WebViewTests: XCTestCase {
     
     func testProgressVisibleWhenLessThenOne() async {
         //given
-//        let authHelper = AuthHelper()
+        //        let authHelper = AuthHelper()
         let authHelper = await MainActor.run { AuthHelper() }
         let presenter = WebViewPresenter(authHelper: authHelper)
         let progress: Float = 0.6
@@ -56,7 +56,7 @@ final class WebViewTests: XCTestCase {
     
     func testProgressHiddenWhenOne() async{
         //given
-//        let authHelper = AuthHelper() //Dummy
+        //        let authHelper = AuthHelper() //Dummy
         let authHelper = await MainActor.run { AuthHelper() }
         let presenter = WebViewPresenter(authHelper: authHelper)
         let progress: Float = 1.0
@@ -71,16 +71,16 @@ final class WebViewTests: XCTestCase {
     func testAuthHelperAuthURL() async {
         //given
         let configuration = AuthConfiguration.standard
-//        let authHelper = AuthHelper(configuration: configuration)
+        //        let authHelper = AuthHelper(configuration: configuration)
         let authHelper = await MainActor.run { AuthHelper(configuration: configuration) }
         //when
         let url = authHelper.authURL()
-
+        
         guard let urlString = url?.absoluteString else {
             XCTFail("Auth URL is nil")
             return
         }
-
+        
         //then
         XCTAssertTrue(urlString.contains(configuration.authURLString))
         XCTAssertTrue(urlString.contains(configuration.accessKey))
@@ -94,7 +94,7 @@ final class WebViewTests: XCTestCase {
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/authorize/native")!
         urlComponents.queryItems = [URLQueryItem(name: "code", value: "test code")]
         let url = urlComponents.url!
-//        let authHelper = AuthHelper()
+        //        let authHelper = AuthHelper()
         let authHelper = await MainActor.run { AuthHelper() }
         //when
         let code = authHelper.code(from: url)

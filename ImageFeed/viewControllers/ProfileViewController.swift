@@ -44,6 +44,8 @@ final class ProfileViewController: UIViewController, ProfileViewProtocol {
         view.addSubview(labelName)
         labelName.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         labelName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
+        labelName.accessibilityIdentifier = "Name"
+        
 
         labelPersonTag.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         labelPersonTag.textColor = .ypGray
@@ -51,7 +53,8 @@ final class ProfileViewController: UIViewController, ProfileViewProtocol {
         view.addSubview(labelPersonTag)
         labelPersonTag.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         labelPersonTag.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8).isActive = true
-
+        labelPersonTag.accessibilityIdentifier = "tag"
+        
         labelGreeting.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         labelGreeting.textColor = .ypWhite
         labelGreeting.translatesAutoresizingMaskIntoConstraints = false
@@ -72,6 +75,7 @@ final class ProfileViewController: UIViewController, ProfileViewProtocol {
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
         button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        button.accessibilityIdentifier = "logoutButton"
     }
 
     func displayProfile(name: String, login: String, bio: String) {

@@ -1,5 +1,5 @@
 //
-//  6. ImagesListPresenterProtocol.swift
+//  ImagesListPresenterProtocol.swift
 //  ImageFeed
 //
 //  Created by Mikita Ivanou on 25/03/2026.
@@ -11,7 +11,7 @@ import UIKit
 protocol ImagesListPresenterProtocol: AnyObject {
     var view: ImagesListViewProtocol? { get set }
     var photosCount: Int { get }
-
+    
     func viewDidLoad()
     func photo(at indexPath: IndexPath) -> Photo
     func imageURL(for indexPath: IndexPath) -> URL?

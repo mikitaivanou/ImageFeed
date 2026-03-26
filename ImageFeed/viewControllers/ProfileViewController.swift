@@ -4,76 +4,66 @@
 //
 //  Created by Mikita Ivanou on 14.01.26.
 //
+
+
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewProtocol {
     let labelName = UILabel()
     let labelPersonTag = UILabel()
     let labelGreeting = UILabel()
     let imageView = UIImageView()
-    private let profileService = ProfileService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
-    
+
+    private var presenter: ProfilePresenterProtocol!
+
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        presenter.viewDidLoad()
+    }
+
+    private func setupUI() {
         view.backgroundColor = .ypBlack
-        if let profile = profileService.profile {
-            updateProfileDetails(with: profile)
-        }
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
-        
+
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
         imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
+
         labelName.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         labelName.textColor = .ypWhite
         labelName.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(labelName)
         labelName.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         labelName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
-        
+
         labelPersonTag.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         labelPersonTag.textColor = .ypGray
         labelPersonTag.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(labelPersonTag)
         labelPersonTag.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         labelPersonTag.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8).isActive = true
-        
+
         labelGreeting.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         labelGreeting.textColor = .ypWhite
         labelGreeting.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(labelGreeting)
         labelGreeting.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         labelGreeting.topAnchor.constraint(equalTo: labelPersonTag.bottomAnchor, constant: 8).isActive = true
-        
-        var exitImage: UIImage {
-            if let systemImage = UIImage(systemName: "ipad.and.arrow.forward") {
-                return systemImage
-            }
-            guard let assetImage = UIImage(named: "exitButton") else {
-                fatalError("Missing exitButton image")
-            }
-            return assetImage
-        }
+
+        let exitImage = UIImage(systemName: "ipad.and.arrow.forward") ?? UIImage()
         let button = UIButton.systemButton(
             with: exitImage,
             target: self,
-            action: #selector(Self.didTapButton)
+            action: #selector(didTapButton)
         )
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -82,86 +72,66 @@ final class ProfileViewController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
         button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
-        
-        
     }
-    
-    private func updateProfileDetails(with profile: Profile) {
-        labelName.text = profile.name.isEmpty
-        ? "Имя не указано"
-        : profile.name
-        labelPersonTag.text = profile.loginName.isEmpty
-        ? "@неизвестный_пользователь"
-        : profile.loginName
-        labelGreeting.text = (profile.bio?.isEmpty ?? true)
-        ? "Профиль не заполнен"
-        : profile.bio
+
+    func displayProfile(name: String, login: String, bio: String) {
+        labelName.text = name
+        labelPersonTag.text = login
+        labelGreeting.text = bio
     }
-    
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: profileImageURL)
-        else { return }
-        print("imageUrl: \(imageUrl)")
-        
+
+    func displayAvatar(url: URL) {
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
-            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
-        
+            .withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large)
+            )
+
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
-            with: imageUrl,
+            with: url,
             placeholder: placeholderImage,
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage,
                 .forceRefresh
-            ]) { result in
-                
-                switch result {
-                case .success(let value):
-                    print(value.image)
-                    print(value.cacheType)
-                    print(value.source)
-                case .failure(let error):
-                    print("[ProfileViewController.updateAvatar] Ошибка: \(error.localizedDescription)")
-                }
-            }
+            ]
+        )
     }
-    
-    @objc
-    private func didTapButton() {
+
+    func showLogoutAlert() {
         let alert = UIAlertController(
             title: "Пока, пока!",
             message: "Вы уверены что хотите выйти?",
             preferredStyle: .alert
         )
-        
-        let logoutAction = UIAlertAction(title: "Да", style: .destructive) { _ in
-            self.logout()
+
+        let logoutAction = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            self?.presenter.didConfirmLogout()
         }
-        
+
         let cancelAction = UIAlertAction(title: "Нет", style: .cancel)
-        
+
         alert.addAction(logoutAction)
         alert.addAction(cancelAction)
-        
+
         present(alert, animated: true)
     }
-    
-    private func logout() {
-        let logoutService = ProfileLogoutService.shared
-        logoutService.logout()
-        
+
+    func switchToSplashScreen() {
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid window configuration")
             return
         }
-        
+
         let splashVC = SplashViewController()
         window.rootViewController = splashVC
+    }
+
+    @objc
+    func didTapButton() {
+        presenter.didTapLogoutButton()
     }
 }

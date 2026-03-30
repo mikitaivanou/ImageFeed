@@ -227,6 +227,7 @@
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aw8-Ey-RFC">
                                                     <rect key="frame" x="333" y="4" width="44" height="44"/>
+                                                    <accessibility key="accessibilityConfiguration" label="likeButton"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="onh-k6-Rck"/>
                                                         <constraint firstAttribute="width" constant="44" id="qzb-eI-T7f"/>

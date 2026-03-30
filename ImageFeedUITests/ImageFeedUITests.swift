@@ -19,71 +19,99 @@ final class ImageFeedUITests: XCTestCase {
     }
     
     func testAuth() throws {
+
         app.buttons["Authenticate"].tap()
-        
-        let webView = app.webViews["UnsplashWebView"]
-        
-        sleep(10)
-        
-        let loginTextField = webView.descendants(matching: .textField).element
-        XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
-        
-        loginTextField.tap()
-        loginTextField.tap()
-        loginTextField.typeText("ivanovnk30@gmail.com")
-        let passwordTextField = webView.descendants(matching: .secureTextField).element
-        //        webView.swipeUp()
-        let coordinate = webView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1))
-        coordinate.tap()
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
-        
+
+            let webView = app.webViews["UnsplashWebView"]
+            XCTAssertTrue(webView.waitForExistence(timeout: 10))
+
+            let loginTextField = webView.descendants(matching: .textField).element
+            XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
+
+            loginTextField.tap()
+            loginTextField.typeText("ivanovnk30@gmail.com")
+
+            let passwordTextField = webView.descendants(matching: .secureTextField).element
+            XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
+
+
+        UIPasteboard.general.string = "erica1215"
+
         passwordTextField.tap()
-        passwordTextField.typeText("aksel0406")
-        //        if app.keyboards.count > 0 {
-        //            app.keyboards.buttons["Done"].tap()
-        //        }
-        //        webView.swipeUp()
-        sleep(5)
-        webView.buttons["Login"].tap()
-        
-        let tablesQuery = app.tables
-        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        
-        XCTAssertTrue(cell.waitForExistence(timeout: 5))
+        passwordTextField.press(forDuration: 1.2)
+
+        if app.menuItems["Paste"].waitForExistence(timeout: 3) {
+            app.menuItems["Paste"].tap()
+        }
+/
+
+            let loginButton = webView.buttons["Login"]
+            XCTAssertTrue(loginButton.waitForExistence(timeout: 10))
+            loginButton.tap()
+
+            let cell = app.tables.children(matching: .cell).element(boundBy: 0)
+            XCTAssertTrue(cell.waitForExistence(timeout: 5))
     }
+    
+
     
     func testFeed() throws {
-        let tablesQuery = app.tables
-        
-        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        cell.swipeUp()
-        
-        sleep(2)
-        
-        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
-        
-        cellToLike.buttons["like button off"].tap()
-        cellToLike.buttons["like button on"].tap()
-        
-        sleep(2)
-        
-        cellToLike.tap()
-        
-        sleep(2)
-        
+        let table = app.tables.element
+        XCTAssertTrue(table.waitForExistence(timeout: 5))
+
+        let firstCell = table.cells.element(boundBy: 0)
+        XCTAssertTrue(firstCell.waitForExistence(timeout: 5))
+
+        table.swipeUp()
+        sleep(1)
+
+        guard let visibleCell = topVisibleCell(in: table) else {
+            XCTFail("Не удалось найти первую видимую ячейку")
+            return
+        }
+
+        scrollDownBy40Percent(in: table)
+        sleep(1)
+
+        let likeButton = visibleCell.buttons["likeButton"]
+        XCTAssertTrue(likeButton.waitForExistence(timeout: 5))
+        likeButton.tap()
+        likeButton.tap()
+
+        visibleCell.tap()
+
         let image = app.scrollViews.images.element(boundBy: 0)
-        // Zoom in
-        image.pinch(withScale: 3, velocity: 1) // zoom in
-        // Zoom out
+        XCTAssertTrue(image.waitForExistence(timeout: 5))
+
+        image.pinch(withScale: 3, velocity: 1)
         image.pinch(withScale: 0.5, velocity: -1)
-        
-        let navBackButtonWhiteButton = app.buttons["navBackButton"]
-        navBackButtonWhiteButton.tap()
-        
+
+        let navBackButton = app.buttons["navBackButton"]
+        XCTAssertTrue(navBackButton.waitForExistence(timeout: 5))
+        navBackButton.tap()
     }
-    
+
+    func topVisibleCell(in table: XCUIElement) -> XCUIElement? {
+        let tableFrame = table.frame
+
+        return table.cells.allElementsBoundByIndex
+            .filter { cell in
+                let frame = cell.frame
+                return cell.exists &&
+                       !frame.isEmpty &&
+                       frame.maxY > tableFrame.minY &&
+                       frame.minY < tableFrame.maxY
+            }
+            .min(by: { $0.frame.minY < $1.frame.minY })
+    }
+
+    func scrollDownBy40Percent(in element: XCUIElement) {
+        let start = element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+        let finish = element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+        start.press(forDuration: 0.01, thenDragTo: finish)
+    }
     func testProfile() throws {
-        sleep(3)
+        sleep(10)
         app.tabBars.buttons.element(boundBy: 1).tap()
         
         XCTAssertTrue(app.staticTexts["Name"].exists)

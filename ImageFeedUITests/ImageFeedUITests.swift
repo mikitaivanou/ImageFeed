@@ -43,7 +43,7 @@ final class ImageFeedUITests: XCTestCase {
         if app.menuItems["Paste"].waitForExistence(timeout: 3) {
             app.menuItems["Paste"].tap()
         }
-/
+
 
             let loginButton = webView.buttons["Login"]
             XCTAssertTrue(loginButton.waitForExistence(timeout: 10))

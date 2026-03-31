@@ -14,7 +14,7 @@ final class ImageFeedUITests: XCTestCase {
     override func setUpWithError() throws {
         
         continueAfterFailure = false
-        app.launchArguments = ["UITEST", "FIRST_PAGE_ONLY"]
+        app.launchArguments = ["FIRST_PAGE_ONLY"]
         app.launch()
     }
     
@@ -29,6 +29,7 @@ final class ImageFeedUITests: XCTestCase {
             XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
 
             loginTextField.tap()
+        loginTextField.tap()
             loginTextField.typeText("ivanovnk30@gmail.com")
 
             let passwordTextField = webView.descendants(matching: .secureTextField).element

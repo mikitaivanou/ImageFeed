@@ -122,6 +122,9 @@ extension ImagesListViewController: UITableViewDataSource {
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath
     ) {
+        if ProcessInfo.processInfo.arguments.contains("FIRST_PAGE_ONLY") {
+                return
+            }
         if indexPath.row == presenter.photosCount - 1 {
             presenter.didScrollToLastCell()
         }

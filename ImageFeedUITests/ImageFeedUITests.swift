@@ -14,12 +14,12 @@ final class ImageFeedUITests: XCTestCase {
     override func setUpWithError() throws {
         
         continueAfterFailure = false
-        
+        app.launchArguments = ["UITEST", "FIRST_PAGE_ONLY"]
         app.launch()
     }
     
     func testAuth() throws {
-
+        sleep(5)
         app.buttons["Authenticate"].tap()
 
             let webView = app.webViews["UnsplashWebView"]
@@ -43,7 +43,7 @@ final class ImageFeedUITests: XCTestCase {
         if app.menuItems["Paste"].waitForExistence(timeout: 3) {
             app.menuItems["Paste"].tap()
         }
-
+            
 
             let loginButton = webView.buttons["Login"]
             XCTAssertTrue(loginButton.waitForExistence(timeout: 10))
@@ -79,6 +79,8 @@ final class ImageFeedUITests: XCTestCase {
         likeButton.tap()
 
         visibleCell.tap()
+        
+        sleep(5)
 
         let image = app.scrollViews.images.element(boundBy: 0)
         XCTAssertTrue(image.waitForExistence(timeout: 5))

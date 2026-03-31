@@ -20,6 +20,14 @@ final class ImagesListService {
     func fetchPhotosNextPage() {
         guard task == nil else { return }
         let nextPage = (lastLoadedPage ?? 0) + 1
+        
+        //for UItest
+        if ProcessInfo.processInfo.arguments.contains("FIRST_PAGE_ONLY"),
+                   nextPage > 1 {
+                    return
+                }
+        //for UItest
+        
         guard let token = OAuth2TokenStorage.shared.token else {
             print("[ImagesListService. fetchPhotosNextPage - Нет токена]")
             return }

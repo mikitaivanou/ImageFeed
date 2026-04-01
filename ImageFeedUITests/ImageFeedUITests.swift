@@ -18,40 +18,45 @@ final class ImageFeedUITests: XCTestCase {
         app.launch()
     }
     
+
+    
     func testAuth() throws {
-        sleep(5)
-        app.buttons["Authenticate"].tap()
+        let authButton = app.buttons["Authenticate"]
+        XCTAssertTrue(authButton.waitForExistence(timeout: 10))
+        authButton.tap()
 
-            let webView = app.webViews["UnsplashWebView"]
-            XCTAssertTrue(webView.waitForExistence(timeout: 10))
+        let webView = app.webViews["UnsplashWebView"]
+        XCTAssertTrue(webView.waitForExistence(timeout: 10))
 
-            let loginTextField = webView.descendants(matching: .textField).element
-            XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
+        let loginTextField = webView.descendants(matching: .textField).element
+        XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
 
-            loginTextField.tap()
-        loginTextField.tap()
-            loginTextField.typeText("ivanovnk30@gmail.com")
+        let loginCoordinate = loginTextField.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        loginCoordinate.tap()
+        loginCoordinate.tap()
 
-            let passwordTextField = webView.descendants(matching: .secureTextField).element
-            XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.keyboards.element.waitForExistence(timeout: 5))
+        app.typeText("ivanovnk30@gmail.com")
 
+        let passwordTextField = webView.descendants(matching: .secureTextField).element
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
 
         UIPasteboard.general.string = "erica1215"
 
-        passwordTextField.tap()
+        let passwordCoordinate = passwordTextField.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        passwordCoordinate.tap()
         passwordTextField.press(forDuration: 1.2)
 
-        if app.menuItems["Paste"].waitForExistence(timeout: 3) {
-            app.menuItems["Paste"].tap()
-        }
-            
+        let pasteMenuItem = app.menuItems["Paste"]
+        XCTAssertTrue(pasteMenuItem.waitForExistence(timeout: 5))
+        pasteMenuItem.tap()
 
-            let loginButton = webView.buttons["Login"]
-            XCTAssertTrue(loginButton.waitForExistence(timeout: 10))
-            loginButton.tap()
+        let loginButton = webView.buttons["Login"]
+        XCTAssertTrue(loginButton.waitForExistence(timeout: 10))
+        loginButton.tap()
 
-            let cell = app.tables.children(matching: .cell).element(boundBy: 0)
-            XCTAssertTrue(cell.waitForExistence(timeout: 5))
+        let firstCell = app.tables.children(matching: .cell).element(boundBy: 0)
+        XCTAssertTrue(firstCell.waitForExistence(timeout: 10))
     }
     
 

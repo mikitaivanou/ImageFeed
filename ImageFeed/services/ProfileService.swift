@@ -29,13 +29,13 @@ struct ProfileResult: Codable {
 }
 
 final class ProfileService {
-
+    
     static let shared = ProfileService()
     private(set) var profile: Profile?
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private init() {}
-
+    
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         task?.cancel()
@@ -69,7 +69,7 @@ final class ProfileService {
         self.task = task
         task.resume()
     }
-
+    
     private func makeProfileRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
             return nil

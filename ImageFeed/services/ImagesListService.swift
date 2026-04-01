@@ -20,6 +20,9 @@ final class ImagesListService {
     func fetchPhotosNextPage() {
         guard task == nil else { return }
         let nextPage = (lastLoadedPage ?? 0) + 1
+        
+       
+        
         guard let token = OAuth2TokenStorage.shared.token else {
             print("[ImagesListService. fetchPhotosNextPage - Нет токена]")
             return }
@@ -137,5 +140,5 @@ final class ImagesListService {
     func logoutImageListService() {
         self.photos = []
     }
-
+    
 }
